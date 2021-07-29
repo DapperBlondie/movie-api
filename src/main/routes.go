@@ -8,5 +8,7 @@ import (
 func chiRoutes() http.Handler {
 	mux := chi.NewRouter()
 
+	mux.Get("/status", config.CheckStatus)
+
 	return mux
 }
