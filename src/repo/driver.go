@@ -3,7 +3,6 @@ package repo
 import (
 	zerolog "github.com/rs/zerolog/log"
 	"gopkg.in/mgo.v2"
-	"time"
 )
 
 type Mongo struct {
@@ -18,7 +17,6 @@ func CreateSession(dsn string) (*Mongo, error) {
 		zerolog.Error().Msg(err.Error())
 		return nil, err
 	}
-	defer session.Copy()
 
 	err = session.Ping()
 	if err != nil {
@@ -27,12 +25,11 @@ func CreateSession(dsn string) (*Mongo, error) {
 	}
 	zerolog.Print("Connected to localhost:27017 ...")
 
-	session.SetPoolLimit(128)
-	session.SetCursorTimeout(time.Minute * 2)
-	session.SetSyncTimeout(time.Second * 10)
-	session.SetSocketTimeout(time.Minute * 2)
-
-	mongo := &Mongo{MSession: session}
+	mongo := &Mongo{
+		MSession:     session,
+		MDatabase:    nil,
+		MCollections: make(map[string]*mgo.Collection),
+	}
 
 	return mongo, nil
 }

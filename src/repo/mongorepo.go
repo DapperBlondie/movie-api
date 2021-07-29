@@ -8,7 +8,7 @@ import (
 
 func (m *Mongo) GetMovieByID(id string) *models.Movie {
 	movie := new(models.Movie)
-	err := m.MCollections["movies"].Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(*movie)
+	err := m.MCollections["movies"].Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&movie)
 	if err != nil {
 		zerolog.Error().Msg(err.Error() + ", Occurred in GetMovieByID.")
 		return nil

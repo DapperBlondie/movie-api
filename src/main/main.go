@@ -4,7 +4,6 @@ import (
 	"github.com/DapperBlondie/movie-api/src/repo"
 	zerolog "github.com/rs/zerolog/log"
 	_ "gopkg.in/mgo.v2/bson"
-	"log"
 	"net/http"
 	"time"
 )
@@ -17,6 +16,9 @@ func main() {
 		zerolog.Fatal().Msg(err.Error())
 		return
 	}
+	defer myMongo.MSession.Close()
+	myMongo.AddDataBase("appdb")
+	myMongo.AddCollection("movies")
 
 	NewConfig(myMongo)
 
@@ -29,7 +31,7 @@ func main() {
 		IdleTimeout:       time.Second * 6,
 	}
 
-	log.Println("Listening and Serving on localhost:8080 ...")
+	zerolog.Log().Msg("Listening and Serving on localhost:8080 ...")
 	err = srv.ListenAndServe()
 	if err != nil {
 		zerolog.Fatal().Msg(err.Error())

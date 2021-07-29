@@ -9,7 +9,7 @@ func chiRoutes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Get("/status", config.CheckStatusHandler)
-	mux.Get("/movie/:id", config.GetMovieByIDHandler)
+	mux.Get("/movie/{id}", config.GetMovieByIDHandler)
 	mux.Post("/insert-movie", config.InsertMovieHandler)
 
 	return mux

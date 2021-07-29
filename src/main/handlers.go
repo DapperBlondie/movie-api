@@ -33,6 +33,7 @@ var config *Config
 
 func NewConfig(dbRepo *repo.Mongo) {
 	config = &Config{DbRepo: dbRepo}
+	return
 }
 
 func (conf *Config) CheckStatusHandler(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +56,7 @@ func (conf *Config) CheckStatusHandler(w http.ResponseWriter, r *http.Request) {
 
 func (conf *Config) GetMovieByIDHandler(w http.ResponseWriter, r *http.Request) {
 	movieID := chi.URLParam(r, "id")
+	zerolog.Log().Msg(movieID)
 
 	movie := conf.DbRepo.GetMovieByID(movieID)
 	w.WriteHeader(http.StatusOK)
@@ -80,7 +82,7 @@ func (conf *Config) InsertMovieHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	movie := &models.Movie{
-		ID:        bson.NewObjectIdWithTime(time.Now()),
+		ID:        bson.NewObjectIdWithTime(time.Now().UTC()),
 		Name:      movieP.Name,
 		Year:      movieP.Year,
 		Directors: movieP.Directors,
