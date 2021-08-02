@@ -25,6 +25,7 @@ type StatusResponse struct {
 	Message string `json:"message"`
 }
 
+// Config use for holding the application configuration
 type Config struct {
 	DbRepo *repo.Mongo
 }
@@ -36,6 +37,7 @@ func NewConfig(dbRepo *repo.Mongo) {
 	return
 }
 
+// CheckStatusHandler use for checking the status of API
 func (conf *Config) CheckStatusHandler(w http.ResponseWriter, r *http.Request) {
 	resp := &StatusResponse{Ok: "Available", Message: "Everything is OK !"}
 
@@ -54,6 +56,7 @@ func (conf *Config) CheckStatusHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// GetMovieByIDHandler use for getting a movie by its own ID
 func (conf *Config) GetMovieByIDHandler(w http.ResponseWriter, r *http.Request) {
 	movieID := chi.URLParam(r, "id")
 	zerolog.Log().Msg(movieID)
@@ -73,6 +76,7 @@ func (conf *Config) GetMovieByIDHandler(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// InsertMovieHandler use for inserting a movie into database
 func (conf *Config) InsertMovieHandler(w http.ResponseWriter, r *http.Request) {
 	movieP := new(MoviePayload)
 	err := json.NewDecoder(r.Body).Decode(movieP)
